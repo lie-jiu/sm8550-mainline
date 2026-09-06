@@ -208,6 +208,16 @@
 			no-map;
 		};
 
+		/* 与 Android 下游相同的 ramoops 保留区(0xa7000000, 4MB):
+		 * 主线内核 printk/panic 日志写入此 RAM 区, 热重启后由 Android 的
+		 * pstore 驱动在同一地址读回 —— 无串口 bring-up 的取日志通道 */
+		ramoops@0xa7000000 {
+			compatible = "ramoops";
+			reg = <0x0 0xa7000000 0x0 0x400000>;
+			console-size = <0x200000>;
+			pmsg-size = <0x200000>;
+		};
+
 		/* Required for libcamera to allocate buffers when cma is used. */
 		linux,cma {
 			compatible = "shared-dma-pool";
