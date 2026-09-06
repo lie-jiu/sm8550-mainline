@@ -1683,12 +1683,15 @@
 	};
 };
 
+&uart7 {
+	status = "okay";
+};
+
 &uart14 {
 	status = "okay";
 
 	bluetooth {
 		compatible = "qcom,wcn7850-bt";
-
 		local-bd-address = [ 24 00 00 00 5a ad ];
 
 		vddrfacmn-supply = <&vreg_pmu_rfa_cmn>;
