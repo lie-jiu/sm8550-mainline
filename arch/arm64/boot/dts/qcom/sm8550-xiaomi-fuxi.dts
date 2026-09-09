@@ -1750,6 +1750,10 @@
 
 &usb_1 {
 	status = "okay";
+	/* USB gadget 模式 (ttyGS0 console / adb 期间不切 host)；
+	   v33/v34 USB ACM 串口实验配置，勿删 */
+	dr_mode = "peripheral";
+	maximum-speed = "high-speed";
 };
 
 &usb_1_dwc3_hs {
