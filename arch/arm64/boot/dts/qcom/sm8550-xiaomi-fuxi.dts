@@ -72,8 +72,21 @@
 	model = "Xiaomi 13";
 	compatible = "xiaomi,fuxi", "qcom,sm8550";
 	chassis-type = "phone";
-	qcom,msm-id = <536 0x20000>; /* SM8550; fuxi overlay 也含此 id, board-id 同 sheng */
-	qcom,board-id = <0x10008 0>;
+	/* fuxi 实测芯片 ID = 0x207 (Kalama/SM8550)；0x218 = KalamaP，sheng/nuwa 另一版本。
+	   双 id 写法照抄 nuwa-mainline，一颗 DTB 两代芯片都能匹配。 */
+	qcom,msm-id = <0x207 0x20000 0x218 0x20000>;
+	/* v22~v30 实测 board-id=0 可通过 fuxi ABL 匹配并 Apply Overlay；
+	   nuwa-mainline 用 0x10008 也能匹配，如需再试可换回。 */
+	qcom,board-id = <0x0 0x0>;
+
+	/* ABL UpdateDeviceTree() 要求根节点已存在 /memory，只往里注入 RAM 表不创建节点
+	   （QRD-Development/abl QcomModulePkg/Library/BootLib/UpdateDeviceTree.c:688）。
+	   缺失 = 内核拿不到 DRAM 信息 → EBS 后秒死无输出，v22~v30 全部秒崩的根因。
+	   占位写法照抄原厂 vendor_boot DTB#12，reg 由 ABL 运行时填真值。 */
+	memory {
+		device_type = "memory";
+		reg = <0x00 0x00 0x00 0x00>;
+	};
 
 	aliases {
 		serial0 = &uart7;
